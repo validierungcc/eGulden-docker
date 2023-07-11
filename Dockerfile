@@ -1,4 +1,6 @@
 FROM ubuntu:18.04 AS builder
+COPY  --from=lncm/berkeleydb:v4.8.30.NC  /opt  /opt
+ENV BDB_PREFIX="/opt/db4"
 ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
@@ -10,14 +12,11 @@ RUN apt-get update && \
         automake \
         libtool \
         pkg-config \
-        libdb++-dev \
         libboost-all-dev \
         libevent-dev \
         libssl-dev \
         ca-certificates \
         bsdmainutils
-
-
 
 RUN addgroup --gid 1000 egulden && \
     adduser --disabled-password --gecos "" --home /egulden --ingroup egulden --uid 1000 egulden
@@ -29,14 +28,15 @@ WORKDIR /egulden/eGulden
 RUN git checkout tags/v1.5.0.0
 
 RUN ./autogen.sh
-RUN ./configure --without-gui --with-incompatible-bdb
+RUN ./configure --without-gui BDB_LIBS="-L${BDB_PREFIX}/lib -ldb_cxx-4.8" BDB_CFLAGS="-I${BDB_PREFIX}/include"
 RUN make
 
+
 FROM ubuntu:18.04
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-        libdb++-dev \
         libboost-all-dev \
         libevent-dev \
         libssl-dev && \
