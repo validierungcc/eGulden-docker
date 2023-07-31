@@ -21,7 +21,7 @@ echo "Created new configuration at ${EGULDEN_CONF}"
 fi
 
 if [ $# -eq 0 ]; then
-  /usr/local/bin/eguldend -rpcbind=0.0.0.0 -rpcport=12341 -rpcallowip=0.0.0.0/0 -printtoconsole=1
+  /usr/local/bin/eguldend -rpcbind=0.0.0.0 -rpcport=21015 -rpcallowip=0.0.0.0/0 -printtoconsole=1
 else
   exec "$@"
 fi
