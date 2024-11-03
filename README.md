@@ -9,7 +9,6 @@ https://www.egulden.org
 Example docker-compose.yml
 
      ---
-    version: '3.9'
     services:
         egulden:
             container_name: egulden
